@@ -1,0 +1,544 @@
+﻿<?xml version="1.0"?>
+<opml version="2.0">
+  <head>
+    <ownerEmail>amaiboroda@gmail.com</ownerEmail>
+  </head>
+  <body>
+    <outline text="Yellow Paper" >
+      <outline text="Ether Value denominations" >
+        <outline text="Smallest denomination is wei" />
+        <outline text="szabo = 1e12 wei" />
+        <outline text="finney = 1e15 wei = 1000 szabo" />
+        <outline text="ether = 1e18 wei = 1000 finney = 1e6 szabo" /></outline>
+      <outline text="Address" >
+        <outline text="160 bit (20 bytes)" />
+        <outline text="Rightmost 160 bits of Keccak hash of ECDSA public key" /></outline>
+      <outline text="World State" >
+        <outline text="Essentially the mapping between addresses and account states" />
+        <outline text="Clients store the state in Merkle Patricia tree" />
+        <outline text="State DB - backend DB, essentially key-value storage of bytearrays to bytearrays" />
+        <outline text="State root hashes are stored in the blockchain" />
+        <outline text="Account state" >
+          <outline text="nonce" >
+            <outline text="for regular account number of transactions sent from this address" />
+            <outline text="for contract number of contract creations" />
+            <outline text="256 bit" /></outline>
+          <outline text="balance" >
+            <outline text="256 bit" /></outline>
+          <outline text="storageRoot" >
+            <outline text="256-bit hash of the root node of storage trie" />
+            <outline text="Storage trie is a maping between 256-bit integers and 256-bit integers" >
+              <outline text="encoded as mapping of Keccak 256-bit hash of key to RLP of value" /></outline>
+          </outline>
+          <outline text="codeHash" >
+            <outline text="256-bit Keccak hash of code" />
+            <outline text="State database contains the full code for this hash" />
+            <outline text="for simple non-contract account 256-bit Keccak hash of empty string" /></outline>
+        </outline>
+        <outline text="Empty account - no code, zero nonce, zero balance // since spurious dragon" />
+        <outline text="Dead account - non-existent or empty // since spurious dragon" /></outline>
+      <outline text="Transaction" >
+        <outline text="Can be of message call type or contract creation type" />
+        <outline text="nonce " >
+          <outline text="number of transactions sent by the sender, 256 bit integer" /></outline>
+        <outline text="gasPrice" >
+          <outline text="number of wei paid for each unit of gas, 256 bit integer" />
+          <outline text="selected by transaction creator" />
+          <outline text="the higher the price the more likely transaction will be selected by the miner" /></outline>
+        <outline text="gasLimit" >
+          <outline text="maximum amount of gas that can be used in this transaction, 256 bit integer" /></outline>
+        <outline text="to" >
+          <outline text="address of recipient for call, 160 bit binary" />
+          <outline text="empty for contract creation (RLP of empty byte series)" /></outline>
+        <outline text="value" >
+          <outline text="to be transferred to recipient or newly created account, 256 bit integer" /></outline>
+        <outline text="v, r, s" >
+          <outline text="elliptic curve values corresponding to the signature" />
+          <outline text="5 bit, 256 bit, 256 bit integers" />
+          <outline text="determine the sender" /></outline>
+        <outline text="init" >
+          <outline text="Only for contract creation" />
+          <outline text="unlimited size byte array with EVM-code for the new account initialization" />
+          <outline text="init code returns &lt;b&gt;body &lt;/b&gt;of the contract (saved as it's code)" />
+          <outline text="init code itself is discarded after first run" /></outline>
+        <outline text="data" >
+          <outline text="Only for message call" />
+          <outline text="unlimited size byte array, specifying the input data for the message call" /></outline>
+      </outline>
+      <outline text="Block" >
+        <outline text="Structure" >
+          <outline text="Header" >
+            <outline text="parentHash" >
+              <outline text="256-bit Keccak hash of parent block header" /></outline>
+            <outline text="ommersHash" >
+              <outline text="256-bit Keccak hash of ommers list of this block" /></outline>
+            <outline text="beneficiary" >
+              <outline text="miner address (or set by miner)" /></outline>
+            <outline text="stateRoot" >
+              <outline text="256-bit Keccak hash of the root node of the state trie after all transactions are executed" /></outline>
+            <outline text="transactionsRoot" >
+              <outline text="256-bit Keccak hash of the root node of the trie of block transactions" /></outline>
+            <outline text="receiptsRoot" >
+              <outline text="256-bit Keccak hash of the root node of the trie of transactions receipts" /></outline>
+            <outline text="logsBloom" >
+              <outline text="The Bloom lter composed from indexable information (logger address and log topics) contained in each log entry from the receipt of each transaction in the transactions list" /></outline>
+            <outline text="difficulty" >
+              <outline text="Can be calculated from the previous block's difficulty and timestamp" >
+                <outline text="difficulty of genesis block = 131072" />
+                <outline text="x = floor(parent block difficulty / 2048)" />
+                <outline text="before homestead: c = 1 if timestamp &amp;lt; parent timestamp + 13, c = -1 otherwise" />
+                <outline text="homestead: c = max(1 - floor((timestamp - parent timestamp) / 10), -99)" />
+                <outline text="byzantium: c = max(2 if parent has uncles else 1 - floor((timestamp - parent timestamp) / 9), -99)" >
+                  <outline text="This change makes difficulty adjustment proportional to ETH issued &amp;amp; hashpower spent on the block, instead of just proportional to timestamp change, which prevents attack vectors with manipulating uncle rate to game the system" /></outline>
+                <outline text="epsilon = floor(2**(floor(block number % 1e5) - 2))" />
+                <outline text="difficulty = max(genesis difficulty, parent difficulty + x * c + epsilon)" />
+                <outline text="#TODO add ice age delay of Byzantium" /></outline>
+              <outline text="This mechanism enforces a homeostasis in terms of the time between blocks; a smaller period between the last two blocks results in an increase in the difficulty level and thus additional computation required, lengthening the likely next period. Conversely, if the period is too large, the difficulty, and expected time to the next block, is reduced." />
+              <outline text="The expected time to find the nonce &amp;amp; mixHash is proportional to the difficulty" /></outline>
+            <outline text="number" >
+              <outline text="number of ancestor blocks" />
+              <outline text="Genesis block has number 0" /></outline>
+            <outline text="gasLimit" >
+              <outline text="current limit of gas expenditure per block" />
+              <outline text="parent gasLimit - floor(parent gasLimit / 1024) &amp;lt; gasLimit &amp;lt; parent gasLimit + floor(parent gasLimit / 1024)" />
+              <outline text="gasLimit &amp;gt;= 125000" /></outline>
+            <outline text="gasUsed" >
+              <outline text="total gas used by transactions" /></outline>
+            <outline text="timestamp" >
+              <outline text="output of Unix's time() at the block inception" />
+              <outline text="must be greater than parent timestamp" /></outline>
+            <outline text="extraData" >
+              <outline text="byte array of 32 bytes or fewer, arbitrary data relevant to the block" /></outline>
+            <outline text="mixHash" >
+              <outline text="256-bit hash used as proof of work together with nonce" /></outline>
+            <outline text="nonce" >
+              <outline text="64 bit hash used as proof of work together with mixHash" />
+              <outline text="nonce &amp;lt;= 2**256 / difficulty" /></outline>
+          </outline>
+          <outline text="Transactions" >
+            <outline text="RLP-encoded pairs of index and transaction" /></outline>
+          <outline text="Transaction receipts" >
+            <outline text="Not a part of the body (transferred through network), but saved to DB after block execution" />
+            <outline text="RLP-encoded pairs of index and receipt" />
+            <outline text="Receipt" >
+              <outline text="Post-transaction state root (before Byzantium); 0 or 1 number showing whether transaction was successfully finished (after Byzantium)" />
+              <outline text="Cumulative gas used in the block after transaction has happened" />
+              <outline text="Logs created during transaction" >
+                <outline text="Series of log entries" >
+                  <outline text="Loggers' address (20 bytes)" />
+                  <outline text="A series of 32-bytes log topics (up to 4 topics)" />
+                  <outline text="Some bytes of data" /></outline>
+              </outline>
+              <outline text="Bloom filter of logs" >
+                <outline text="2048 bits (256 bytes)" />
+                <outline text="#TODO see 4.4.1" />
+                <outline text="Allow easy search log by topic" /></outline>
+            </outline>
+            <outline text="" /></outline>
+          <outline text="Ommer/uncle block headers (blocks with parent equal to current block grandparent)" >
+            <outline text="each same format as header" /></outline>
+        </outline>
+        <outline text="Block header validity" >
+          <outline text="nonce &amp;amp; mixHash are correct https://workflowy.com/#/eafb927a7646" />
+          <outline text="gasUsed &amp;lt;= gasLimit" />
+          <outline text="gasLimit is correct https://workflowy.com/#/c3c11e8558df" />
+          <outline text="timestamp &amp;gt; parent timestamp" />
+          <outline text="number = parent number + 1" />
+          <outline text="extra data is at most 32 bytes" /></outline>
+        <outline text="Block finalization" >
+          <outline text="Validate ommers" >
+            <outline text="Verify that header is valid" />
+            <outline text="Maximum of ommer headers is 2" /></outline>
+          <outline text="Validate transactions" >
+            <outline text="gasUsed of block = accumulated gas used according to the last transaction" /></outline>
+          <outline text="Apply rewards" >
+            <outline text="Award block beneficiary" >
+              <outline text="5 Ether before Byzantium" />
+              <outline text="3 Ether after Byzantium" /></outline>
+            <outline text="For each uncle header award block beneficiary with 5 * 1/32 Ether" />
+            <outline text="Award each uncle beneficiary with (1 + (Uncle block number - block number) / 8) * 5 Ether" /></outline>
+          <outline text="Verify state and nonce" /></outline>
+        <outline text="Genesis block" >
+          <outline text="Parent hash = 0" />
+          <outline text="Ommers list is empty" />
+          <outline text="Beneficiary address = 0" />
+          <outline text="stateRoot - determined by development premine #TODO not clear" />
+          <outline text="transactions root = 0" />
+          <outline text="Receipts root = 0" />
+          <outline text="Log bloom = all 0s" />
+          <outline text="Difficulty = 2**17" />
+          <outline text="number = 0" />
+          <outline text="gasUsed = 3141592" />
+          <outline text="gasLimit = 0" />
+          <outline text="time - initial timestamp" />
+          <outline text="extraData = 0" />
+          <outline text="mixHash = 0" />
+          <outline text="nonce = KEC((42))" /></outline>
+      </outline>
+      <outline text="Transaction execution" >
+        <outline text="Check for validiy" >
+          <outline text="The transaction is well-formed RLP, with no additional trailing bytes" />
+          <outline text="Signature is valid" />
+          <outline text="Nonce = sender's current nonce" />
+          <outline text="gasLimit &amp;gt;= the intrinsic gas, g0, used by the transaction (see below)" />
+          <outline text="sender balance contains at least the cost, v0, required in up-front payment (see below)" /></outline>
+        <outline text="Substate - info that is acted upon immediately following the transaction" >
+          <outline text="Suicide set" >
+            <outline text="set of accounts that will be discarded following the transaction's completion" /></outline>
+          <outline text="Log series" >
+            <outline text="a series of archived and indexable `checkpoints' in VM code execution that allow for contract-calls to be easily tracked by onlookers external to the Ethereum world (such as decentralised application front-ends)" />
+            <outline text="Append-only, not readable by contracts" />
+            <outline text="~10x cheaper  than storage" />
+            <outline text="organized into Merkle trie which allows efficient light client access to event records" /></outline>
+          <outline text="Touched accounts" >
+            <outline text="Empty ones are deleted at the end of transaction" /></outline>
+          <outline text="Refund balance" >
+            <outline text="increased through using the SSTORE instruction in order to reset contract storage to zero from some non-zero value" /></outline>
+        </outline>
+        <outline text="Execution" >
+          <outline text="Intrinsic gas - the amount of gas this transaction requires to be paid prior to execution" >
+            <outline text="for input data/new contract init code G(txdatazero) for zero byte + G(txdatanonzero) for each next byte" />
+            <outline text="+ G(txcreate) for contract creation after Homestead" />
+            <outline text="+ G(transaction)" /></outline>
+          <outline text="Up-front cost = gasPrice * gasLimit + transferValue" />
+          <outline text="Validity" >
+            <outline text="Sender can be calculated from signature" />
+            <outline text="Sender exists" />
+            <outline text="Transaction nonce equals sender nonce" />
+            <outline text="Intrinsic gas &amp;lt;= gasLimit" />
+            <outline text="up-front cost &amp;lt;= sender balance" />
+            <outline text="gasLimit + gas used already in this block &amp;lt;= block gasLimit" /></outline>
+          <outline text="Execution" >
+            <outline text="Increment nonce of sender" />
+            <outline text="sender balance -= gasLimit * gasPrice" />
+            <outline text="gasLeft = gasLimit - intrinsicGas" />
+            <outline text="This moment is called checkpoint state" />
+            <outline text="Contract creation" >
+              <outline text="New account" >
+                <outline text="Address = rightmost 160 bits of Keccac hash of RLP(sender, sender nonce - 1) // decrementing nonce assuming it was already incremented; we need nonce at the beginning of transaction here" />
+                <outline text="nonce = 1" />
+                <outline text="balance = transferred vlaue + previous balance if account already existed" />
+                <outline text="Storage is empty" />
+                <outline text="Code hash = Keccak256(empty string)" /></outline>
+              <outline text="Reduce sender's balance by the value passed" />
+              <outline text="Execute initialization code" >
+                <outline text="If it runs out of gas, OOG exception occurs and the entire create operation should have no effect on the state, effectively leaving it as it was immediately prior to attempting the creation." >
+                  <outline text="intrinsic cost is still paid, gasLeft = 0 after it" />
+                  <outline text="transferred value is not paid" /></outline>
+                <outline text="Subleties" >
+                  <outline text="During this execution newly created account exists but without code. So any message received by it doesn't execute any code." />
+                  <outline text="If the initialisation execution ends with a SUICIDE instruction, the matter is moot since the account will be deleted before the transaction is completed." />
+                  <outline text="For a normal STOP code, or if the code returned is otherwise empty, then the state is left with a zombie account, and any remaining balance will be locked into the account forever." /></outline>
+              </outline>
+              <outline text="Final contract creation cost is paid = 2**256 - 1 if created contract's code size &amp;lt;= 24000, otherwise G(codedesposit) * code size " >
+                <outline text="(that is, subtracted from gasLeft)" />
+                <outline text="This can also run out of gas resulting in OOG" />
+                <outline text="Before Homestead in case of OOG here account is still created, along with initialization side-effects and the value is transferred, but no contract code is deployed. gasLeft stays the same then." /></outline>
+              <outline text="Save code returned from initialization code as new contract's code" /></outline>
+            <outline text="Message call" >
+              <outline text="Transfer value from sender to recipent" >
+                <outline text="If recipient doesn't exist and transferred value is not zero, create it first with no code, no state, zero balance and zero nonce" /></outline>
+              <outline text="Execute account's code" >
+                <outline text="If exception occurs (OOG, stack underflow, invalid jump destination, invalid instruction), no gas is refunded to the caller and the state is reverted to the point immediately prior to balance transfer (so the gas fee still goes to rhe miner and value transfer is reverted)" />
+                <outline text="Precompiled contracts" >
+                  <outline text="Four contracts which don't invoke EVM execution (i.e. implemented natively)" />
+                  <outline text="address = 1 - ECREC (elliptic curve public key recovery function)" />
+                  <outline text="address = 2 - SHA256 " />
+                  <outline text="address = 3 - RIP160 (RIPEMD 160-bit hash scheme)" />
+                  <outline text="address = 4 - ID (identity function)" >
+                    <outline text=" output equals input" /></outline>
+                  <outline text="address = 5 - MODEXP (modular exponentiation (base**exp) % mod) // since Byzantium" />
+                  <outline text="address = 6 - ECADD (elliptic curve point addition) // since Byzantium" />
+                  <outline text="address = 7 - ECMUL (elliptic curve point scalar multiplication)// since Byzantium" />
+                  <outline text="address = 8 - ECPAIR // since Byzantium" /></outline>
+              </outline>
+            </outline>
+          </outline>
+          <outline text="Finlization" >
+            <outline text="Refuned gas = gasLeft + min(substate refundBalance, floor(gasUsed / 2))" />
+            <outline text="The used gas goes to block beneficiary (miner)" />
+            <outline text="Delete all accounts that either appear in the suicide list or are touched and empty" /></outline>
+        </outline>
+      </outline>
+      <outline text="EVM" >
+        <outline text="stack-based architecture" />
+        <outline text="Word size, stack item size = 256 bit (32 bytes)" />
+        <outline text="Maximum stack size is 1024" />
+        <outline text="Memory - word-addressed byte array. Volatile" />
+        <outline text="Storage - word-addressable word array. Non-volatile, maintained as a part of the system state." />
+        <outline text="All locations in memory and storage are initially zero" />
+        <outline text="Program code is not stored in memory, instead it is stored in a virtual ROM accessible only through special instruction" />
+        <outline text="Integers are big-endian" />
+        <outline text="160-bit address is stored in rightwards (least significant) bits of 256-bit words" />
+        <outline text="Gas paid for the operation (before operation execution)" >
+          <outline text="Intrinsic operation cost" />
+          <outline text="Payment for the subordinate message call or contract creation (in case of CREATE, CALL &amp;amp; CALLCODE instructions)" />
+          <outline text="Payment for the usage of the memory" >
+            <outline text="Over an account's execution, the total fee for memory usage payable is proportional to smallest multiple of 32 bytes that are required such that all memory indices (whether for read or write) are included in the range" />
+            <outline text="When storage value is cleared, refund is given" /></outline>
+        </outline>
+        <outline text="Machine state" >
+          <outline text="gas available" />
+          <outline text="program counter PC - 256 bit" />
+          <outline text="Memory contents" />
+          <outline text="Active number of words in memory" />
+          <outline text="Stack contents" /></outline>
+        <outline text="Exception happens when" >
+          <outline text="There's insufficient gas for the next instruction" />
+          <outline text="instruction is invalid" />
+          <outline text="There's insufficient items in stack for instruction" />
+          <outline text="JUMP/JUMPI destination is invalid" >
+            <outline text="Destination should be any position in code occupied by JUMPDEST instruction" />
+            <outline text="All such positions must be on valid instruction boundaries, rather than sitting in the data portion of PUSH operations and must appear within the explicitly defined portion of the code (rather than in the implicitly defined STOP operations that trail it)" /></outline>
+          <outline text="New stack size is going to be more than 1024" /></outline>
+        <outline text="Program halts when" >
+          <outline text="after RETURN instruction with result given by return" />
+          <outline text="after STOP, SUICIDE instructions with result ()" /></outline>
+        <outline text="Execution cycle" >
+          <outline text="Stack items are added or removed from the left-most, lower-indexed portion of the series" />
+          <outline text="Gas is reduced by instruction cost" />
+          <outline text="PC increments, unless it's JUMP or JUMPI" /></outline>
+        <outline text="Operation cost" >
+          <outline text="G_memory paid for each word of memory accessed expansion" />
+          <outline text="After 724 bytes of memory used it costs quadratically" /></outline>
+        <outline text="Instructions" >
+          <outline text="Stop and arithmetics" >
+            <outline text="STOP - halts execution" />
+            <outline text="ADD - pop two values from stack, push the sum" />
+            <outline text="MUL - pop two values from stack, push the product" />
+            <outline text="SUB - pop two values from stack, push the difference" />
+            <outline text="DIV - pop two values from stack, push the integer divison, or 0 if denominator is 0" />
+            <outline text="SDIV - signed integer division" >
+              <outline text="0 if denominator is 0" />
+              <outline text="-2**255 if nominator = -2*255 &amp;amp; denominator = -1 (overflow)" />
+              <outline text="integer division (truncating) with correct sign" />
+              <outline text="All values are treated as two's complement signed 256-integers" /></outline>
+            <outline text="MOD - pop two values from stack, modulo remainder or 0 if denominator is 0" />
+            <outline text="SMOD - pop two values from stack, signed modulo remainder" >
+              <outline text="0 if denominator is 0" />
+              <outline text="All values are treated as two's complement signed 256-integers" /></outline>
+            <outline text="ADDMOD - modulo addition" >
+              <outline text="pop three values from stack, push sum of two modulo third" />
+              <outline text="addition is not subject to modulo 2**256" />
+              <outline text="0 if denominator is 0" /></outline>
+            <outline text="MULMOD - modulo multiplication" >
+              <outline text="pop three values from stack, push product of two modulo third" />
+              <outline text="multiplication is not subject to modulo 2**256" />
+              <outline text="0 if denominator is 0" /></outline>
+            <outline text="EXP - pop two values from stack, push the exponentiation" />
+            <outline text="SIGNEXTEND - extend length of signed integer" >
+              <outline text="pops two values" />
+              <outline text="set the lowest t bits in first to value of bit t" />
+              <outline text="t = 256 - 8(second + 1)" />
+              <outline text="#TODO how is this used" /></outline>
+          </outline>
+          <outline text="Comparison &amp;amp; bitwise logic" >
+            <outline text="LT - pop two values from stack, push 1 if less, 0 otherwise" />
+            <outline text="GT - pop two values from stack, push 1 if greater, 0 otherwise" />
+            <outline text="SLT - signed less-than, same as LT but values are treated as signed" />
+            <outline text="SGT - signed greater-than, same as GT but values are treated as signed" />
+            <outline text="EQ - pop two values from stack, push 1 if equal, 0 otherwise" />
+            <outline text="ISZERO - pop value from stack, push 1 if 0, 0 otherwise" />
+            <outline text="AND - pop two values from stack, push bitwise AND" />
+            <outline text="OR - pop two values from stack, push bitwise OR" />
+            <outline text="XOR - pop two values from stack, push bitwise XOR" />
+            <outline text="NOT - pop value from stack, push bitwise NOT" />
+            <outline text="BYTE - retrieve single byte from word" >
+              <outline text="pop two values from stack" />
+              <outline text="push byte number second value form first" />
+              <outline text="0 if second value &amp;gt;= 32" />
+              <outline text="Counting bytes from the left, i.e. N = 0 is most significant" /></outline>
+          </outline>
+          <outline text="SHA3 - compute Keccak-256 hash" >
+            <outline text="pop two values from stack" />
+            <outline text="push hash of array in memory starting at first value and second value in length" /></outline>
+          <outline text="Environmental info" >
+            <outline text="ADDRESS - push address of currently executing account" />
+            <outline text="BALANCE - pop address from stack, push balance of account or 0 if doesn't exist" />
+            <outline text="ORIGIN - push execution origination address (sender if original transaction, never a contract)" />
+            <outline text="CALLER - push address of the account directly responsible for this execution" />
+            <outline text="CALLVALUE - push deposited value by the transaction responsible for this execution" />
+            <outline text="CALLDATALOAD - get input data passed with transaction (max first 32 bytes)" />
+            <outline text="CALLDATASIZE - push size of input data" />
+            <outline text="CALLDATACOPY - copy input data to memory" >
+              <outline text="pops 3 values" />
+              <outline text="first - dest address" />
+              <outline text="second - source offset in input data" />
+              <outline text="third - count in bytes" />
+              <outline text="fills dest with zeroes if out of input data bounds" /></outline>
+            <outline text="CODESIZE - get size of code running in current environment" />
+            <outline text="CODECOPY - copy code to memory" >
+              <outline text="pops 3 values" />
+              <outline text="first - dest memory address" />
+              <outline text="second - source offset in code" />
+              <outline text="third - count in bytes" />
+              <outline text="fills dest with STOP opcode if out of bounds" /></outline>
+            <outline text="GASPRICE - get gas price specified by the originating transaction" />
+            <outline text="EXTCODESIZE - pop address ( (lowest 160 bits are read)), push size of account's code" />
+            <outline text="EXTCODECOPY - copy an account's code to memory" >
+              <outline text="pops 4 values" />
+              <outline text="first - account address (lowest 160 bits are read)" />
+              <outline text="second - dest memory address" />
+              <outline text="thirf - offset in source code" />
+              <outline text="fourth - count in bytes" />
+              <outline text="fills dest with STOP opcode if out of bounds" /></outline>
+            <outline text="RETURNDATASIZE  - push size of data returned from call // since Byzantium" />
+            <outline text="RETURNDATACOPY  - copy return data to memory// since Byzantium" />
+            <outline text="STATICCALL - call with a guarantee that the state is not modified, read-only call // since Byzantium" /></outline>
+          <outline text="Block info" >
+            <outline text="BLOCKHASH - get the hash of one of the 256 most recent complete blocks" >
+              <outline text="pops block number" />
+              <outline text="pushes block hash" />
+              <outline text="pushes 0 if block number is greater than current or older than 256 blocks back" /></outline>
+            <outline text="COINBASE - get the block's beneficiary address" />
+            <outline text="TIMESTAMP - get the block's timestamp" />
+            <outline text="NUMBER - get current block number" />
+            <outline text="DIFFICULTY - get current block difficlulty" />
+            <outline text="GASLIMIT - get current block gas limit" /></outline>
+          <outline text="Stack, memory, storage and flow" >
+            <outline text="POP - pop item from stack" />
+            <outline text="MLOAD - pop address, push 32 byte-word from memory" />
+            <outline text="MSTORE - pops memory address and value from stack, writes 32 bytes into memory" />
+            <outline text="MSTORE8 - pops memory address and value from stack, writes one byte into memory with value mod 256" />
+            <outline text="SLOAD - pop storage address, push value from storage" />
+            <outline text="SSTORE - pop storage address and value, writes value to storage" >
+              <outline text="Gas cost is different for setting the value that was 0 and otherwise" />
+              <outline text="Setting the value to 0 when it was non-zero gets a refund" /></outline>
+            <outline text="JUMP - pop value from stack, set PC to it" />
+            <outline text="JUMPI - conditional jump" >
+              <outline text="pop two values" />
+              <outline text="set PC to first value if second != 0" /></outline>
+            <outline text="PC - push program counter value prior to the increment corresponding to this instruction" />
+            <outline text="MSIZE - push size of active memory in bytes" />
+            <outline text="GAS - push the value of available gas prior to reduction for this instruction" />
+            <outline text="JUMPDEST - mark a valid destination for jumps" /></outline>
+          <outline text="Push" >
+            <outline text="PUSH1 - push 1 byte from the code address next to current PC" >
+              <outline text="push 0 if out of bounds" />
+              <outline text="byte is put to the least significant position in stack word" /></outline>
+            <outline text="PUSH2..PUSH32 - similar to PUSH1 but put several bytes to least significant position of stack word" /></outline>
+          <outline text="Duplication" >
+            <outline text="DUP1 - push value equal to topmost stack value" />
+            <outline text="DUP2..DUP16 - push value equal to Nth value in stack" /></outline>
+          <outline text="Exchange" >
+            <outline text="SWAP1 - exchange two topmost values in stack" />
+            <outline text="SWAP2..SWAP16 - exchange topmost with Nth value in stack" /></outline>
+          <outline text="Logging" >
+            <outline text="LOG0 - append log record with no topics" >
+              <outline text="pop two values" />
+              <outline text="first is src address of the message in memory" />
+              <outline text="second is size in bytes" /></outline>
+            <outline text="LOG1..LOG4 - append log record witn N topics" >
+              <outline text="pop 2 + N values" />
+              <outline text="first two are address and size of message" />
+              <outline text="next N are topic values" /></outline>
+          </outline>
+          <outline text="System" >
+            <outline text="CREATE - create a new account" >
+              <outline text="pops 3 values" />
+              <outline text="first is value to transfer" />
+              <outline text="second and third are address in memory and size of the initialization code" />
+              <outline text="This account nonce is incremented" />
+              <outline text="pushes 0 if execution failed with exception, if balance is not enough to transfer value, or if current depth of contract creation / message calls reached 1024" />
+              <outline text="pushes address of new account otherwise" /></outline>
+            <outline text="CALL - message call into an account" >
+              <outline text="pops 7 values" />
+              <outline text="first - gas #TODO not clear" />
+              <outline text="second - receiver account address" />
+              <outline text="third - transfer value" />
+              <outline text="fourth and fifth - memory address and size of input data" />
+              <outline text="sixth and seventh -  memory address and size of output data" />
+              <outline text="pushes 0 if execution failed with exception, if balance is not enough to transfer value, or if current depth of contract creation / message calls reached 1024" />
+              <outline text="pushes 1 if success" />
+              <outline text="#TODO gas cost" /></outline>
+            <outline text="CALLCODE - message-call into this account with alternative account's code" >
+              <outline text="call code of another account but with this same account as recipient" />
+              <outline text="parameters the same as for CALL" />
+              <outline text="DELEGATECALL was added in Homestead to fix not preserving sender and value" >
+                <outline text="CALLCODE sets sender to called account" />
+                <outline text="DELEGATECALL sets sender to this account" />
+                <outline text="http://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall" /></outline>
+            </outline>
+            <outline text="RETURN - halt execution and return output data" >
+              <outline text="pops 2 values - memory address and size of output data" /></outline>
+            <outline text="DELEGATECALL - message-call into this account with alternative account's code, but persisting the current values for sender and value // since Homestead" >
+              <outline text="pops 6 values" />
+              <outline text="parameters the same as for CALL but transfer value is skipped" />
+              <outline text="recipient is the same account as this, just the code is overwritten and context is almost identical (apart from gas and depth)" /></outline>
+            <outline text="SUICIDE - halt the execution and register account for later deletion" >
+              <outline text="pops account address to send remaining funds to" />
+              <outline text="Refund is given to account if it's not yet in suicide list" />
+              <outline text="#TODO gas cost not clear" /></outline>
+            <outline text="REVERT - stop execution and return error without consuming all remaining gas // Since Byzantium" /></outline>
+        </outline>
+      </outline>
+      <outline text="Ethash" >
+        <outline text="Seed is computed for each block" >
+          <outline text="Seed is 32 bytes" />
+          <outline text="Different for every epoch" />
+          <outline text="For the first epoch  = Keccak256(32 bytes of zeros)" />
+          <outline text="For next epochs = Kecc356(previous seed)" /></outline>
+        <outline text="Compute pseudorandom cache from the seed" >
+          <outline text="Sequentially fill cacheSize bytes of memory" >
+            <outline text="First 64 bytes = KEC512(seed)" />
+            <outline text="Each next 64 bytes = KEC512(prev)" /></outline>
+          <outline text="J(cacherounds) = 3 passes of RandMemoHash algorithm" /></outline>
+        <outline text="From the cache generate a dataset with the property that each item in the dataset depends on only a small number of items from the cache" >
+          <outline text="light clients don't store the whole dataset, only cache" />
+          <outline text="Essentially, we combine data from J(parents)=256 pseudorandomly selected cache nodes, and hash that to compute the dataset" />
+          <outline text="The entire dataset is then generated by a number of items, each 64 bytes in size" />
+          <outline text="In order to calculate the single item we use an algorithm inspired by the FNV hash in some cases as a non-associative substitute for XOR" /></outline>
+        <outline text="Dataset grows linearly with time" />
+        <outline text="Mining - grab random slices of the dataset and hash them together" >
+          <outline text="Essentially, we maintain a &quot;mix&quot; J(mixbytes) = 128 bytes wide, and repeatedly sequentially fetch 128 bytes from the full dataset and use the FNV function to combine it with the mix" />
+          <outline text="128 bytes of sequential access are used so that each round of the algorithm always fetches a full page from RAM" />
+          <outline text="If the output of this algorithm is below the desired target, then the nonce is valid" /></outline>
+        <outline text="Verification can regenerate only the specific pieces of dataset from the cache" />
+        <outline text="Dataset is updated once every epoch = 30000 blocks, grows every time" />
+        <outline text="In order to avoid regularity leading to cyclic behavior, the dataset and cache sizes must be prime numbers" />
+        <outline text="https://github.com/ethereum/wiki/wiki/Ethash" /></outline>
+      <outline text="RLP" >
+        <outline text="Integer" >
+          <outline text="RLP(big endian representation of integer)" /></outline>
+        <outline text="Byte array" >
+          <outline text="If one byte with value &amp;lt; 128, return this one value" />
+          <outline text="If size &amp;lt; 56 bytes, return sequence [128 + size, bytes]" />
+          <outline text="If size &amp;gt;= 56 bytes, return [183 + size of encoded length, big-endian integer length, bytes]" /></outline>
+        <outline text="List" >
+          <outline text="if total size &amp;lt; 56 bytes, [192 + total size, serialized items]" />
+          <outline text="If size &amp;gt;= 56 bytes, return [247 + size of encoded length, big-endian integer length, serialized items]" /></outline>
+      </outline>
+      <outline text="Merkle Patricia Tree" >
+        <outline text="Allow efficient (logarithmic) insert/delete operations" />
+        <outline text="Hex-prefix encoding" >
+          <outline text="Encodes sequence of hex nibbles + a flag to a sequence of bytes" />
+          <outline text="High nibble of the first byte contains two flags" >
+            <outline text="the lowest bit encodes the oddness of sequence length" />
+            <outline text="the second-lowest encodes the input flag" /></outline>
+          <outline text="If number of nibbles is even low nibble of first byte is zero, data starts with second byte" />
+          <outline text="If number of nibbles is odd data starts with low nibble of first byte " /></outline>
+        <outline text="Maps from 256-bit hashes to arbitrary-length binary data" />
+        <outline text="If node's RLP encoding is &amp;lt; 32 bytes it is stored directly, otherwise it stores hash-pointer to byte array" />
+        <outline text="Three kinds of nodes" >
+          <outline text="Leaf" >
+            <outline text="RLP(HP-encoded(remaining nibbles of key), true), value)" /></outline>
+          <outline text="Extension" >
+            <outline text="RLP(HP-encoded(2 (?) next nibbles of key), false), pointer to next node)" /></outline>
+          <outline text="Branch" >
+            <outline text="RLP(child0, ..., child15, value or () if no value for this prefix)" /></outline>
+        </outline>
+        <outline text="https://i.stack.imgur.com/YZGxe.png" /></outline>
+      <outline text="Signing transactions" >
+        <outline text="Private key - random positive integer 32 bytes long, big-endian in the range [1, sec256k1n - 1]" />
+        <outline text="Public key - byte array of size 64 formed from the concatenation of two positive   integers each &amp;lt; 2**256" />
+        <outline text="ECDSASIGN(e, private key) = (v, r, s)" />
+        <outline text="Message to sign is the Keccak hash of the transaction fields" />
+        <outline text="Validation" >
+          <outline text="0 &amp;lt; r &amp;lt; secp256k1n" />
+          <outline text="0  &amp;lt; s &amp;lt; secp2561kn before Homestead" />
+          <outline text="0 &amp;lt; s &amp;lt; sep256k1n / 2 after Homestead" />
+          <outline text="v - either the 'recovery id' (27 or 28, specifies sign of the curve point) or 'chain id doubled plus 35 or 36'" /></outline>
+        <outline text="#TODO not all clear, elliptic curve crypto is magic" /></outline>
+      <outline text="https://i.redd.it/vko4yn9gqopx.png" /></outline>
+  </body>
+</opml>
