@@ -91,8 +91,7 @@
                 <outline text="byzantium: c = max(2 if parent has uncles else 1 - floor((timestamp - parent timestamp) / 9), -99)" >
                   <outline text="This change makes difficulty adjustment proportional to ETH issued &amp;amp; hashpower spent on the block, instead of just proportional to timestamp change, which prevents attack vectors with manipulating uncle rate to game the system" /></outline>
                 <outline text="epsilon = floor(2**(floor(block number % 1e5) - 2))" />
-                <outline text="difficulty = max(genesis difficulty, parent difficulty + x * c + epsilon)" />
-                <outline text="#TODO add ice age delay of Byzantium" /></outline>
+                <outline text="difficulty = max(genesis difficulty, parent difficulty + x * c + epsilon)" /></outline>
               <outline text="This mechanism enforces a homeostasis in terms of the time between blocks; a smaller period between the last two blocks results in an increase in the difficulty level and thus additional computation required, lengthening the likely next period. Conversely, if the period is too large, the difficulty, and expected time to the next block, is reduced." />
               <outline text="The expected time to find the nonce &amp;amp; mixHash is proportional to the difficulty" /></outline>
             <outline text="number" >
@@ -134,7 +133,7 @@
                 <outline text="#TODO see 4.4.1" />
                 <outline text="Allow easy search log by topic" /></outline>
             </outline>
-            <outline text="" /></outline>
+          </outline>
           <outline text="Ommer/uncle block headers (blocks with parent equal to current block grandparent)" >
             <outline text="each same format as header" /></outline>
         </outline>
@@ -331,6 +330,10 @@
               <outline text="set the lowest t bits in first to value of bit t" />
               <outline text="t = 256 - 8(second + 1)" />
               <outline text="#TODO how is this used" /></outline>
+            <outline text="Bitwise shifting // since  Constantinople" >
+              <outline text="SHL - shift left, pop 2 values from the stack, push arg2 &amp;lt;&amp;lt; arg1" />
+              <outline text="SHR - logical shift right, pop 2 values from the stack, push arg2 &amp;gt;&amp;gt; arg1 with zero fill" />
+              <outline text="SAR - arithmetic shift right, pop 2 values from the stack, push arg2 &amp;gt;&amp;gt; arg1 with sign extension" /></outline>
           </outline>
           <outline text="Comparison &amp;amp; bitwise logic" >
             <outline text="LT - pop two values from stack, push 1 if less, 0 otherwise" />
