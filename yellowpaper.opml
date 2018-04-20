@@ -154,8 +154,8 @@
             <outline text="Award block beneficiary" >
               <outline text="5 Ether before Byzantium" />
               <outline text="3 Ether after Byzantium" /></outline>
-            <outline text="For each uncle header award block beneficiary with 5 * 1/32 Ether" />
-            <outline text="Award each uncle beneficiary with (1 + (Uncle block number - block number) / 8) * 5 Ether" /></outline>
+            <outline text="For each uncle header award block beneficiary with blockReward / 32" />
+            <outline text="Award each uncle beneficiary with (1 + (Uncle block number - block number) / 8) * blockReward" /></outline>
           <outline text="Verify state and nonce" /></outline>
         <outline text="Genesis block" >
           <outline text="Parent hash = 0" />
@@ -224,7 +224,7 @@
                 <outline text="If it runs out of gas, OOG exception occurs and the entire create operation should have no effect on the state, effectively leaving it as it was immediately prior to attempting the creation." >
                   <outline text="intrinsic cost is still paid, gasLeft = 0 after it" />
                   <outline text="transferred value is not paid" /></outline>
-                <outline text="Subleties" >
+                <outline text="Subtleties" >
                   <outline text="During this execution newly created account exists but without code. So any message received by it doesn't execute any code." />
                   <outline text="If the initialisation execution ends with a SUICIDE instruction, the matter is moot since the account will be deleted before the transaction is completed." />
                   <outline text="For a normal STOP code, or if the code returned is otherwise empty, then the state is left with a zombie account, and any remaining balance will be locked into the account forever." /></outline>
@@ -361,7 +361,7 @@
             <outline text="ORIGIN - push execution origination address (sender if original transaction, never a contract)" />
             <outline text="CALLER - push address of the account directly responsible for this execution" />
             <outline text="CALLVALUE - push deposited value by the transaction responsible for this execution" />
-            <outline text="CALLDATALOAD - get input data passed with transaction (max first 32 bytes)" />
+            <outline text="CALLDATALOAD - pop offset, push input data passed with transaction (max 32 bytes starting with offset)" />
             <outline text="CALLDATASIZE - push size of input data" />
             <outline text="CALLDATACOPY - copy input data to memory" >
               <outline text="pops 3 values" />
