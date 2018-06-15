@@ -542,6 +542,8 @@
           <outline text="0 &amp;lt; s &amp;lt; sep256k1n / 2 after Homestead" />
           <outline text="v - either the 'recovery id' (27 or 28, specifies sign of the curve point) or 'chain id doubled plus 35 or 36'" /></outline>
         <outline text="#TODO not all clear, elliptic curve crypto is magic" /></outline>
-      <outline text="https://i.redd.it/vko4yn9gqopx.png" /></outline>
+      <outline text="Misc references" >
+        <outline text="Graphical interpretation of YP https://i.redd.it/vko4yn9gqopx.png" /></outline>
+      <outline text="https://github.com/gumb0/yellowpaper-outline" /></outline>
   </body>
 </opml>
