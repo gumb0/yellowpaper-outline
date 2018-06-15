@@ -7,17 +7,17 @@ Licensed under the Creative Commons Attribution Share-Alike (CC-BY-SA) version 4
 
 ## Contributing
 
-1. Copy and paste the contents of [](yellowpaper.opml) into [WorkFlowy](https://workflowy.com/), it will be parsed and inserted as an expanded outline.
+1. Copy and paste the contents of [yellowpaper.opml](yellowpaper.opml) into [WorkFlowy](https://workflowy.com/), it will be parsed and inserted as an expanded outline.
 
 ![](screenshots/import.jpg)
 
-3. Do your edits.
+2. Do your edits.
 
-4. Hover over the bullet point of "Yellow Paper" top level item and select Export.
+3. Hover over the bullet point of "Yellow Paper" top level item and select Export.
 
 ![](screenshots/context_menu.jpg)
 
-5. Switch to OPML format, copy the document contents and paste to your local forked [](yellowpaper.opml).
+4. Switch to OPML format, copy the document contents and paste to your local forked [yellowpaper.opml](yellowpaper.opml).
 
 ![](screenshots/export.jpg)
 
