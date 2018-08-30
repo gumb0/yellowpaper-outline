@@ -185,8 +185,9 @@
         </outline>
         <outline text="Block finalization">
           <outline text="Validate ommers">
-            <outline text="Verify that header is valid" />
             <outline text="Maximum of ommer headers is 2" />
+            <outline text="Verify that header is valid" />
+            <outline text="Ommer should be a sibling to one of 6 this block's ancestors (either parent or grandparent or grand-grandparent and so on up to 6th ancestor)" />
           </outline>
           <outline text="Validate transactions">
             <outline text="gasUsed of block = accumulated gas used according to the last transaction" />
@@ -220,7 +221,7 @@
         </outline>
       </outline>
       <outline text="Transaction execution">
-        <outline text="Check for validiy">
+        <outline text="Check for validity">
           <outline text="The transaction is well-formed RLP, with no additional trailing bytes" />
           <outline text="Signature is valid" />
           <outline text="Nonce = sender's current nonce" />
@@ -313,7 +314,7 @@
               </outline>
             </outline>
           </outline>
-          <outline text="Finlization">
+          <outline text="Finalization">
             <outline text="Refuned gas = gasLeft + min(substate refundBalance, floor(gasUsed / 2))" />
             <outline text="The used gas goes to block beneficiary (miner)" />
             <outline text="Delete all accounts that either appear in the suicide list or are touched and empty" />
@@ -369,6 +370,7 @@
           <outline text="After 724 bytes of memory used it costs quadratically" />
         </outline>
         <outline text="Instructions">
+          <outline text="Gas costs https://ethgastable.info/" />
           <outline text="Stop and arithmetics">
             <outline text="STOP - halts execution" />
             <outline text="ADD - pop two values from stack, push the sum" />
@@ -455,7 +457,7 @@
               <outline text="fills dest with STOP opcode if out of bounds" />
             </outline>
             <outline text="GASPRICE - get gas price specified by the originating transaction" />
-            <outline text="EXTCODESIZE - pop address ( (lowest 160 bits are read)), push size of account's code" />
+            <outline text="EXTCODESIZE - pop address (lowest 160 bits are read), push size of account's code" />
             <outline text="EXTCODECOPY - copy an account's code to memory">
               <outline text="pops 4 values" />
               <outline text="first - account address (lowest 160 bits are read)" />
@@ -466,7 +468,9 @@
             </outline>
             <outline text="RETURNDATASIZE  - push size of data returned from call // since Byzantium" />
             <outline text="RETURNDATACOPY  - copy return data to memory// since Byzantium" />
-            <outline text="STATICCALL - call with a guarantee that the state is not modified, read-only call // since Byzantium" />
+            <outline text="EXTCODEHASH -  pop address (lowest 160 bits are read), push keccak256 hash of account's code // since Constantinople">
+              <outline text="keccak256 hash of empty data in case account has no code" />
+            </outline>
           </outline>
           <outline text="Block info">
             <outline text="BLOCKHASH - get the hash of one of the 256 most recent complete blocks">
@@ -536,6 +540,13 @@
               <outline text="pushes 0 if execution failed with exception, if balance is not enough to transfer value, or if current depth of contract creation / message calls reached 1024" />
               <outline text="pushes address of new account otherwise" />
             </outline>
+            <outline text="CREATE2 - create a new account // since Constantinople">
+              <outline text="pops 4 values" />
+              <outline text="first is value to transfer" />
+              <outline text="second and third are address in memory and size of the initialization code" />
+              <outline text="fourth is salt" />
+              <outline text="Works similar to CREATE but address of new contract is rightmost 160 bits of Keccac hash of (msg.sender ++ salt ++ init_code)" />
+            </outline>
             <outline text="CALL - message call into an account">
               <outline text="pops 7 values" />
               <outline text="first - gas #TODO not clear" />
@@ -570,6 +581,7 @@
               <outline text="#TODO gas cost not clear" />
             </outline>
             <outline text="REVERT - stop execution and return error without consuming all remaining gas // Since Byzantium" />
+            <outline text="STATICCALL - call with a guarantee that the state is not modified, read-only call // since Byzantium" />
           </outline>
         </outline>
       </outline>
