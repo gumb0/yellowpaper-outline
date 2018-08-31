@@ -1,7 +1,11 @@
-  # Ethereum Yellow Paper notes in OPML format
+# Ethereum Yellow Paper notes in OPML format
 These are the outline-style notes for quick reference based on Ethereum ["Yellow Paper" specification](https://github.com/ethereum/yellowpaper), originally by Gavin Wood.
 
-OPML file can be imported into [WorkFlowy](https://workflowy.com/) or other tools for convenient view and edit. Publicly accessible rendered document can be found at https://workflowy.com/s/H4ol.uu3jlqyv23#/c8f59abac3a8.
+OPML file can be imported into [WorkFlowy](https://workflowy.com/) or [Dynalist](https://dynalist.io) or [Checkvist](https://checkvist.com) or other tools for convenient view and edit. 
+
+Publicly shared rendered document can be found at:
+- https://workflowy.com/s/H4ol.uu3jlqyv23#/c8f59abac3a8
+- https://dynalist.io/d/ZSa0gOOV2CuT5NWPEu5FnLtc
 
 Licensed under the Creative Commons Attribution Share-Alike (CC-BY-SA) version 4.0.
 
