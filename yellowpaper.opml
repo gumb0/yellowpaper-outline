@@ -614,6 +614,7 @@
         <outline text="Dataset is updated once every epoch = 30000 blocks, grows every time" />
         <outline text="In order to avoid regularity leading to cyclic behavior, the dataset and cache sizes must be prime numbers" />
         <outline text="https://github.com/ethereum/wiki/wiki/Ethash" />
+        <outline text="https://docs.google.com/drawings/d/12yaGlsb5cz7IlWXcwgT6xXympFDVf84C6UrYkqHRipQ/view" />
       </outline>
       <outline text="RLP">
         <outline text="Integer">
