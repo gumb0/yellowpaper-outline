@@ -42,6 +42,11 @@
             <outline text="State database contains the full code for this hash" />
             <outline text="for simple non-contract account 256-bit Keccak hash of empty string" />
           </outline>
+          <outline text="version // since Istanbul">
+            <outline text="256-bit integer of VM version to use in contract execution" />
+            <outline text="Precompiled contracts and EOA always have version 0" />
+            <outline text="if version is 0 it is skipped in the RLP-encoding of the account" />
+          </outline>
         </outline>
         <outline text="Empty account - no code, zero nonce, zero balance // since spurious dragon" />
         <outline text="Dead account - non-existent or empty // since spurious dragon" />
@@ -272,8 +277,17 @@
                 <outline text="balance = transferred vlaue + previous balance if account already existed" />
                 <outline text="Storage is empty" />
                 <outline text="Code hash = Keccak256(empty string)" />
+                <outline text="version // since Istanbul ">
+                  <outline text="CREATE and CREATE2 - caller's version" />
+                  <outline text="Contract creation transaction - the latest hard fork version" />
+                </outline>
               </outline>
               <outline text="Reduce sender's balance by the value passed" />
+              <outline text="Validation of initialization code // since Istanbul">
+                <outline text="When version = 0, do nothing" />
+                <outline text="Other VM versions define their own validation stages" />
+                <outline text="If the validation phrase fails, deployment does not proceed and return out-of-gas." />
+              </outline>
               <outline text="Execute initialization code">
                 <outline text="If it runs out of gas, OOG exception occurs and the entire create operation should have no effect on the state, effectively leaving it as it was immediately prior to attempting the creation.">
                   <outline text="intrinsic cost is still paid, gasLeft = 0 after it" />
@@ -294,9 +308,12 @@
             </outline>
             <outline text="Message call">
               <outline text="Transfer value from sender to recipent">
-                <outline text="If recipient doesn't exist and transferred value is not zero, create it first with no code, no state, zero balance and zero nonce" />
+                <outline text="If recipient doesn't exist and transferred value is not zero, create it first with no code, no state, zero balance and zero nonce">
+                  <outline text="and zero version // since Istanbul" />
+                </outline>
               </outline>
               <outline text="Execute account's code">
+                <outline text="VM's version used is based on version of called account // since Istanbul" />
                 <outline text="If exception occurs (OOG, stack underflow, invalid jump destination, invalid instruction), no gas is refunded to the caller and the state is reverted to the point immediately prior to balance transfer (so the gas fee still goes to rhe miner and value transfer is reverted)" />
                 <outline text="Precompiled contracts">
                   <outline text="Four contracts which don't invoke EVM execution (i.e. implemented natively)" />
