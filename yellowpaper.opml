@@ -545,18 +545,17 @@
               <outline text="first is value to transfer" />
               <outline text="second and third are address in memory and size of the initialization code" />
               <outline text="fourth is salt" />
-              <outline text="Works similar to CREATE but address of new contract is rightmost 160 bits of Keccac hash of (msg.sender ++ salt ++ init_code)" />
+              <outline text="Works similar to CREATE but address of new contract is rightmost 160 bits of Keccac hash of (0xff ++ msg.sender ++ salt ++ keccak(init_code))" />
             </outline>
             <outline text="CALL - message call into an account">
               <outline text="pops 7 values" />
-              <outline text="first - gas #TODO not clear" />
+              <outline text="first - gas we provide to this execution" />
               <outline text="second - receiver account address" />
               <outline text="third - transfer value" />
               <outline text="fourth and fifth - memory address and size of input data" />
               <outline text="sixth and seventh -  memory address and size of output data" />
               <outline text="pushes 0 if execution failed with exception, if balance is not enough to transfer value, or if current depth of contract creation / message calls reached 1024" />
               <outline text="pushes 1 if success" />
-              <outline text="#TODO gas cost" />
             </outline>
             <outline text="CALLCODE - message-call into this account with alternative account's code">
               <outline text="call code of another account but with this same account as recipient" />
