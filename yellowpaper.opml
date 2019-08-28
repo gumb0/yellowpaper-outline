@@ -436,7 +436,7 @@
           <outline text="Environmental info">
             <outline text="ADDRESS - push address of currently executing account" />
             <outline text="BALANCE - pop address from stack, push balance of account or 0 if doesn't exist" />
-            <outline text="ORIGIN - push execution origination address (sender if original transaction, never a contract)" />
+            <outline text="ORIGIN - push execution origination address (sender of original transaction, never a contract)" />
             <outline text="CALLER - push address of the account directly responsible for this execution" />
             <outline text="CALLVALUE - push deposited value by the transaction responsible for this execution" />
             <outline text="CALLDATALOAD - pop offset, push input data passed with transaction (max 32 bytes starting with offset)" />
@@ -462,7 +462,7 @@
               <outline text="pops 4 values" />
               <outline text="first - account address (lowest 160 bits are read)" />
               <outline text="second - dest memory address" />
-              <outline text="thirf - offset in source code" />
+              <outline text="third - offset in source code" />
               <outline text="fourth - count in bytes" />
               <outline text="fills dest with STOP opcode if out of bounds" />
             </outline>
